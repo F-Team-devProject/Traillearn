@@ -1,8 +1,8 @@
-# Guide de Contribution - Coach&Pro'Talent
+# Guide de Contribution - Traillearn
 
 ## 🤝 Bienvenue !
 
-Merci de votre intérêt pour contribuer au projet Coach&Pro'Talent ! Ce guide vous aidera à comprendre comment contribuer efficacement au projet.
+Merci de votre intérêt pour contribuer au projet Traillearn ! Ce guide vous aidera à comprendre comment contribuer efficacement au projet.
 
 ## 📋 Table des matières
 
@@ -61,9 +61,9 @@ Nous nous engageons à offrir un environnement accueillant et inclusif pour tous
 ### Configuration de l'environnement
 
 ```bash
-# 1. Fork et clone du repository
-git clone https://github.com/votre-username/platform.git
-cd platform
+# 1. clone du repository
+git clone https://github.com/votre-username/traillearn.git
+cd traillearn
 
 # 2. Installation des dépendances
 npm install

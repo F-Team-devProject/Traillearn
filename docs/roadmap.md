@@ -1,8 +1,8 @@
-# Roadmap de Développement - Coach&Pro'Talent
+# Roadmap de Développement - Traillearn
 
 ## 🎯 Vue d'ensemble
 
-Cette roadmap détaille le plan de développement de la plateforme Coach&Pro'Talent sur 12 mois, avec un focus sur la qualité, la sécurité et l'expérience utilisateur.
+Cette roadmap détaille le plan de développement de la plateforme Traillearn sur 12 mois, avec un focus sur la qualité, la sécurité et l'expérience utilisateur.
 
 ## 📅 Timeline globale
 
