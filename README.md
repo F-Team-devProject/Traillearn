@@ -1,8 +1,8 @@
-# Coach&Pro'Talent - Plateforme Jeune Académique
+# Traillearn - Plateforme Jeune Académique
 
 ## 📋 Vue d'ensemble du projet
 
-Coach&Pro'Talent est une plateforme web innovante dédiée à l'accompagnement des jeunes dans leur orientation académique et professionnelle, avec un focus sur la mobilité Afrique-Europe. La plateforme intègre l'intelligence artificielle pour fournir des recommandations personnalisées et facilite le réseautage entre étudiants, mentors et professionnels.
+Traillearn est une plateforme innovante dédiée à l'accompagnement des jeunes dans leur orientation académique et professionnelle, avec un focus sur la mobilité Afrique-Europe-Asie-Amérique, le réseautage et l'orientation scolaire. La plateforme intègre l'intelligence artificielle pour fournir des recommandations personnalisées et facilite le réseautage entre étudiants, mentors et professionnels sans oublier l'assistance à l'accompagnement académique.
 
 ## 🎯 Objectifs principaux
 
@@ -11,6 +11,7 @@ Coach&Pro'Talent est une plateforme web innovante dédiée à l'accompagnement d
 - **Accès aux opportunités** (bourses, certifications, événements)
 - **Intégration IA** pour des recommandations intelligentes
 - **Mentorat structuré** avec suivi et outils de communication
+- **Intégration sociale et académique**
 
 ## 🏗️ Architecture technique
 
@@ -162,6 +163,6 @@ Ce projet est sous licence MIT. Voir [LICENSE](./LICENSE) pour plus de détails.
 
 ## 📞 Contact
 
-- Email: contact@coachprotalent.com
-- LinkedIn: [Coach&Pro'Talent](https://linkedin.com/company/coachprotalent)
-- Site web: https://coachprotalent.com
+- Email: contact@traillearn.com
+- LinkedIn: [Traillearn](https://linkedin.com/company/traillearn)
+- Site web: https://traillearn.com

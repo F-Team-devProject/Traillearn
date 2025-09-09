@@ -1,8 +1,8 @@
-# Guide de Sécurité - Coach&Pro'Talent
+# Guide de Sécurité - Traillearn
 
 ## 🛡️ Vue d'ensemble de la sécurité
 
-La sécurité est une priorité absolue pour Coach&Pro'Talent. Ce document détaille les mesures de sécurité implémentées, les bonnes pratiques et les procédures de conformité.
+La sécurité est une priorité absolue pour Traillearn. Ce document détaille les mesures de sécurité implémentées, les bonnes pratiques et les procédures de conformité.
 
 ## 🔒 Standards de conformité
 
@@ -131,10 +131,10 @@ class PasswordManager {
     const hasNumbers = /\d/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
-    return password.length >= minLength && 
-           hasUpperCase && 
-           hasLowerCase && 
-           hasNumbers && 
+    return password.length >= minLength &&
+           hasUpperCase &&
+           hasLowerCase &&
+           hasNumbers &&
            hasSpecialChar;
   }
 }
@@ -153,12 +153,12 @@ class DataEncryption {
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipher(this.algorithm, this.key);
     cipher.setAAD(Buffer.from('coachprotalent', 'utf8'));
-    
+
     let encrypted = cipher.update(text, 'utf8', 'hex');
     encrypted += cipher.final('hex');
-    
+
     const tag = cipher.getAuthTag();
-    
+
     return {
       encrypted,
       iv: iv.toString('hex'),
@@ -168,16 +168,16 @@ class DataEncryption {
 
   decrypt(encryptedData: { encrypted: string; iv: string; tag: string }): string {
     const decipher = crypto.createDecipher(
-      this.algorithm, 
+      this.algorithm,
       this.key
     );
-    
+
     decipher.setAAD(Buffer.from('coachprotalent', 'utf8'));
     decipher.setAuthTag(Buffer.from(encryptedData.tag, 'hex'));
-    
+
     let decrypted = decipher.update(encryptedData.encrypted, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
-    
+
     return decrypted;
   }
 }
@@ -265,7 +265,7 @@ const validateRequest = (schema: Joi.ObjectSchema) => {
 
 // Sanitisation des entrées
 const sanitizeInput = (input: string): string => {
-  return DOMPurify.sanitize(input, { 
+  return DOMPurify.sanitize(input, {
     ALLOWED_TAGS: [],
     ALLOWED_ATTR: []
   });
@@ -281,9 +281,9 @@ app.use((req, res, next) => {
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  
+
   // Content Security Policy
-  res.setHeader('Content-Security-Policy', 
+  res.setHeader('Content-Security-Policy',
     "default-src 'self'; " +
     "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
@@ -291,7 +291,7 @@ app.use((req, res, next) => {
     "img-src 'self' data: https:; " +
     "connect-src 'self' https://api.coachprotalent.com;"
   );
-  
+
   next();
 });
 ```
@@ -311,7 +311,7 @@ const securityLogger = winston.createLogger({
     winston.format.json()
   ),
   transports: [
-    new winston.transports.File({ 
+    new winston.transports.File({
       filename: 'logs/security.log',
       level: 'warn'
     }),
@@ -322,7 +322,7 @@ const securityLogger = winston.createLogger({
 // Middleware de logging des événements de sécurité
 const securityAudit = (req: Request, res: Response, next: NextFunction) => {
   const originalSend = res.send;
-  
+
   res.send = function(data) {
     // Log des tentatives d'authentification
     if (req.path.includes('/auth/login')) {
@@ -334,7 +334,7 @@ const securityAudit = (req: Request, res: Response, next: NextFunction) => {
         timestamp: new Date().toISOString()
       });
     }
-    
+
     // Log des accès aux ressources sensibles
     if (req.path.includes('/admin') || req.path.includes('/api/users')) {
       securityLogger.info({
@@ -346,10 +346,10 @@ const securityAudit = (req: Request, res: Response, next: NextFunction) => {
         timestamp: new Date().toISOString()
       });
     }
-    
+
     originalSend.call(this, data);
   };
-  
+
   next();
 };
 ```
@@ -364,7 +364,7 @@ class IntrusionDetection {
   async checkSuspiciousActivity(ip: string, event: string): Promise<boolean> {
     const key = `${ip}:${event}`;
     const count = this.suspiciousIPs.get(key) || 0;
-    
+
     if (count > this.THRESHOLD) {
       await this.blockIP(ip);
       securityLogger.warn({
@@ -376,7 +376,7 @@ class IntrusionDetection {
       });
       return true;
     }
-    
+
     this.suspiciousIPs.set(key, count + 1);
     return false;
   }
@@ -434,7 +434,7 @@ class IntrusionDetection {
 6. **Leçons apprises** : Amélioration des processus
 
 ### 3. Contacts d'Urgence
-- **Équipe de sécurité** : security@coachprotalent.com
-- **DPO** : dpo@coachprotalent.com
-- **Direction** : management@coachprotalent.com
+- **Équipe de sécurité** : security@Traillearn.com
+- **DPO** : dpo@Traillearn.com
+- **Direction** : management@Traillearn.com
 - **Support technique 24/7** : +33 1 23 45 67 89
