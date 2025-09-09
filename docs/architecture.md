@@ -1,8 +1,8 @@
-# Architecture Technique - Coach&Pro'Talent
+# Architecture Technique - Traillearn
 
 ## 🏗️ Vue d'ensemble de l'architecture
 
-L'architecture de Coach&Pro'Talent suit les principes de **microservices**, **Domain-Driven Design (DDD)** et **Clean Architecture** pour assurer la scalabilité, la maintenabilité et la sécurité.
+L'architecture de Traillearn suit les principes de **microservices**, **Domain-Driven Design (DDD)** et **Clean Architecture** pour assurer la scalabilité, la maintenabilité et la sécurité.
 
 ## 📐 Diagramme d'architecture globale
 

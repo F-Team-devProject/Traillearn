@@ -1,4 +1,4 @@
-# Guide de Développement - Coach&Pro'Talent
+# Guide de Développement - Traillearn
 
 ## 🚀 Environnement de développement
 
@@ -14,7 +14,7 @@
 
 ```bash
 # Cloner le repository
-git clone https://github.com/coachprotalent/platform.git
+git clone https://github.com/F-Team-devProject/Traillearn.git
 cd platform
 
 # Installation des dépendances frontend
@@ -46,7 +46,7 @@ npm run dev
 ## 🏗️ Structure du projet
 
 ```
-coachprotalent-platform/
+Traillearn/
 ├── frontend/                 # Application Next.js
 │   ├── src/
 │   │   ├── app/             # App Router (Next.js 13+)
@@ -156,11 +156,11 @@ class PostgreSQLUserRepository implements UserRepository {
   async findById(id: string): Promise<User | null> {
     // Implémentation avec Prisma
   }
-  
+
   async save(user: User): Promise<User> {
     // Implémentation avec Prisma
   }
-  
+
   async delete(id: string): Promise<void> {
     // Implémentation avec Prisma
   }
@@ -349,7 +349,7 @@ const validateRequest = (schema: Joi.ObjectSchema) => {
 };
 
 // Utilisation
-app.post('/api/auth/register', 
+app.post('/api/auth/register',
   validateRequest(userRegistrationSchema),
   authController.register
 );
@@ -636,14 +636,14 @@ const userRegistrations = new Counter({
 // Middleware pour collecter les métriques
 const metricsMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const start = Date.now();
-  
+
   res.on('finish', () => {
     const duration = (Date.now() - start) / 1000;
     httpRequestDuration
       .labels(req.method, req.route?.path || req.path, res.statusCode.toString())
       .observe(duration);
   });
-  
+
   next();
 };
 ```
