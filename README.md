@@ -1,8 +1,8 @@
-# Traillearn - Plateforme Jeune Académique
+# Traillearn - Plateforme de Réseautage Académique International
 
 ## 📋 Vue d'ensemble du projet
 
-Traillearn est une plateforme innovante dédiée à l'accompagnement des jeunes dans leur orientation académique et professionnelle, avec un focus sur la mobilité Afrique-Europe-Asie-Amérique, le réseautage et l'orientation scolaire. La plateforme intègre l'intelligence artificielle pour fournir des recommandations personnalisées et facilite le réseautage entre étudiants, mentors et professionnels sans oublier l'assistance à l'accompagnement académique.
+Traillearn est une plateforme web innovante dédiée à l'accompagnement des jeunes dans leur orientation académique et professionnelle, avec un focus sur la mobilité internationale. La plateforme intègre l'intelligence artificielle pour fournir des recommandations personnalisées et facilite le réseautage entre étudiants, mentors et professionnels.
 
 ## 🎯 Objectifs principaux
 
@@ -11,43 +11,35 @@ Traillearn est une plateforme innovante dédiée à l'accompagnement des jeunes 
 - **Accès aux opportunités** (bourses, certifications, événements)
 - **Intégration IA** pour des recommandations intelligentes
 - **Mentorat structuré** avec suivi et outils de communication
-- **Intégration sociale et académique**
 
 ## 🏗️ Architecture technique
 
-### Stack technologique recommandée
+### Stack technologique optimisée
 
 #### Frontend
-- **React.js 18+** avec **Next.js 14+** (App Router)
-- **TypeScript** pour la sécurité des types
-- **Tailwind CSS** pour le styling
+- **Next.js 14+** avec **App Router** et **TypeScript**
+- **Tailwind CSS** + **shadcn/ui** pour l'interface
+- **React Query (TanStack Query)** pour la gestion d'état serveur
+- **Zustand** pour l'état global
+- **React Hook Form** + **Zod** pour la validation
 - **Framer Motion** pour les animations
-- **React Query** pour la gestion d'état serveur
 
-#### Backend
-- **Node.js 20+** avec **Express.js**
-- **TypeScript** pour la cohérence
-- **Prisma ORM** pour la gestion de base de données
-- **JWT** pour l'authentification
-- **Socket.io** pour le temps réel
-
-#### Base de données
-- **PostgreSQL 15+** (base principale)
-- **Redis** pour le cache et les sessions
-- **Elasticsearch** pour la recherche avancée
+#### Backend & Base de données
+- **Supabase** (PostgreSQL + Auth + Real-time + Storage)
+- **Supabase Edge Functions** (TypeScript) pour la logique métier
+- **Row Level Security (RLS)** pour la sécurité des données
+- **PostgreSQL** avec extensions (PostGIS, Full-text search)
 
 #### Intelligence Artificielle
-- **Python 3.11+** avec **FastAPI**
-- **TensorFlow/PyTorch** pour les modèles ML
-- **OpenAI API** pour les recommandations avancées
-- **scikit-learn** pour l'analyse des données
+- **OpenAI API** intégré directement dans Next.js
+- **Vercel AI SDK** pour le streaming des réponses
+- **Edge Functions** pour les recommandations personnalisées
 
-#### Infrastructure & DevOps
-- **Docker** pour la containerisation
-- **Kubernetes** pour l'orchestration
-- **AWS/GCP** pour l'hébergement
+#### Déploiement & Infrastructure
+- **Vercel** pour le frontend (déploiement automatique)
+- **Supabase** pour le backend (hébergé et géré)
+- **Vercel Edge Network** pour le CDN global
 - **GitHub Actions** pour le CI/CD
-- **Nginx** comme reverse proxy
 
 ## 🔒 Sécurité et conformité
 
@@ -110,40 +102,42 @@ Traillearn est une plateforme innovante dédiée à l'accompagnement des jeunes 
 
 ### Prérequis
 - Node.js 20+
-- Python 3.11+
-- PostgreSQL 15+
-- Redis 7+
-- Docker & Docker Compose
+- npm ou yarn
+- Compte Supabase (gratuit)
+- Compte Vercel (gratuit)
 
 ### Installation
 ```bash
 # Cloner le repository
-git clone https://github.com/coachprotalent/platform.git
-cd platform
+git clone https://github.com/F-Team-devProject/Traillearn.git
+cd Traillearn
 
 # Installation des dépendances
 npm install
-pip install -r requirements.txt
 
 # Configuration de l'environnement
-cp .env.example .env
-# Éditer .env avec vos configurations
+cp .env.example .env.local
+# Éditer .env.local avec vos clés Supabase
 
-# Démarrage des services
-docker-compose up -d
-
-# Migration de la base de données
-npm run db:migrate
+# Configuration Supabase
+npx supabase init
+npx supabase start  # Pour le développement local
 
 # Démarrage du développement
 npm run dev
 ```
 
+### Configuration Supabase
+1. Créer un projet sur [supabase.com](https://supabase.com)
+2. Récupérer les clés dans Settings > API
+3. Configurer Row Level Security (RLS)
+4. Importer le schéma de base de données
+
 ## 📊 Métriques et KPIs
 
 ### Métriques techniques
-- Temps de réponse API < 200ms
-- Disponibilité > 99.9%
+- Temps de réponse API < 200ms (Supabase optimisé)
+- Disponibilité > 99.9% (SLA Supabase)
 - Taux d'erreur < 0.1%
 - Couverture de tests > 80%
 
@@ -152,6 +146,18 @@ npm run dev
 - Engagement utilisateur
 - Taux de conversion mentorat
 - Satisfaction utilisateur (NPS)
+
+## ⚠️ Points de vigilance
+
+### Sécurité critique
+- **Row Level Security (RLS)** : Configuration obligatoire pour protéger les données
+- **Politiques d'accès** : Définir clairement qui peut accéder à quoi
+- **Audit régulier** : Vérifier les permissions et l'accès aux données
+
+### Limitations et évolutions
+- **Volumes élevés** : Au-delà de 200k utilisateurs, évaluer une migration
+- **Fonctionnalités spécifiques** : Certains besoins peuvent nécessiter un backend custom
+- **Évolution rapide** : Supabase évolue vite, surveiller les changements d'API
 
 ## 🤝 Contribution
 

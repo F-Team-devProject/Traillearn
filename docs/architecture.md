@@ -2,7 +2,7 @@
 
 ## 🏗️ Vue d'ensemble de l'architecture
 
-L'architecture de Traillearn suit les principes de **microservices**, **Domain-Driven Design (DDD)** et **Clean Architecture** pour assurer la scalabilité, la maintenabilité et la sécurité.
+L'architecture de Traillearn suit les principes de **Serverless**, **JAMstack** et **Clean Architecture** avec Supabase comme backend-as-a-service pour assurer la rapidité de développement, la scalabilité et la sécurité.
 
 ## 📐 Diagramme d'architecture globale
 
@@ -10,106 +10,193 @@ L'architecture de Traillearn suit les principes de **microservices**, **Domain-D
 ┌─────────────────────────────────────────────────────────────────┐
 │                        Frontend Layer                          │
 ├─────────────────────────────────────────────────────────────────┤
-│  Next.js App  │  Mobile App  │  Admin Dashboard  │  PWA        │
+│  Next.js 14 App  │  PWA  │  Admin Dashboard  │  Mobile (Future) │
 └─────────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                      API Gateway Layer                         │
+│                    Vercel Edge Network                         │
 ├─────────────────────────────────────────────────────────────────┤
-│  Nginx  │  Rate Limiting  │  Load Balancer  │  SSL Termination │
+│  CDN Global  │  Edge Functions  │  Automatic Scaling  │  SSL    │
 └─────────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                     Microservices Layer                        │
+│                    Supabase Backend                            │
 ├─────────────────────────────────────────────────────────────────┤
-│ Auth Service │ User Service │ AI Service │ Mentor Service │ ... │
+│ Auth │ PostgreSQL │ Real-time │ Storage │ Edge Functions │ API  │
 └─────────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                      Data Layer                                │
+│                    External Services                           │
 ├─────────────────────────────────────────────────────────────────┤
-│ PostgreSQL │ Redis │ Elasticsearch │ S3 Storage │ Message Queue │
+│ OpenAI API │ Google OAuth │ LinkedIn OAuth │ Resend Email      │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ## 🔧 Services principaux
 
-### 1. Authentication Service
-**Responsabilité** : Gestion de l'authentification et de l'autorisation
+### 1. Supabase Auth (Authentification)
+**Responsabilité** : Gestion complète de l'authentification et de l'autorisation
 
-**Technologies** :
-- Node.js + Express + TypeScript
-- JWT + Refresh Tokens
-- bcrypt pour le hachage des mots de passe
-- OAuth2 (Google, LinkedIn)
+**Fonctionnalités** :
+- Authentification email/mot de passe
+- OAuth2 (Google, LinkedIn, GitHub)
+- Authentification multi-facteurs (2FA)
+- Gestion des sessions et tokens JWT
+- Row Level Security (RLS) intégrée
 
-**Endpoints principaux** :
-```
-POST /auth/register
-POST /auth/login
-POST /auth/refresh
-POST /auth/logout
-POST /auth/forgot-password
-POST /auth/reset-password
-GET  /auth/verify-email
-POST /auth/2fa/enable
-POST /auth/2fa/verify
-```
+**API Supabase Auth** :
+```typescript
+// Inscription
+const { data, error } = await supabase.auth.signUp({
+  email: 'user@example.com',
+  password: 'password',
+  options: {
+    data: {
+      first_name: 'John',
+      last_name: 'Doe'
+    }
+  }
+})
 
-### 2. User Management Service
-**Responsabilité** : Gestion des profils utilisateurs et des préférences
+// Connexion
+const { data, error } = await supabase.auth.signInWithPassword({
+  email: 'user@example.com',
+  password: 'password'
+})
 
-**Technologies** :
-- Node.js + Express + TypeScript
-- Prisma ORM
-- File upload avec AWS S3
-
-**Endpoints principaux** :
-```
-GET    /users/profile
-PUT    /users/profile
-GET    /users/:id/public
-POST   /users/upload-avatar
-GET    /users/search
-PUT    /users/preferences
+// OAuth
+const { data, error } = await supabase.auth.signInWithOAuth({
+  provider: 'google'
+})
 ```
 
-### 3. AI Recommendation Service
-**Responsabilité** : Moteur de recommandations et IA conversationnelle
+### 2. Supabase Database (PostgreSQL)
+**Responsabilité** : Gestion des données avec Row Level Security
 
-**Technologies** :
-- Python + FastAPI
-- TensorFlow/PyTorch
-- OpenAI API
-- scikit-learn
+**Fonctionnalités** :
+- PostgreSQL avec extensions (PostGIS, Full-text search)
+- API REST automatique
+- Real-time subscriptions
+- Row Level Security (RLS) pour la sécurité
+- Triggers et fonctions stockées
 
-**Endpoints principaux** :
+**API Supabase Database** :
+```typescript
+// Récupération des profils
+const { data, error } = await supabase
+  .from('user_profiles')
+  .select('*')
+  .eq('role', 'mentor')
+
+// Mise à jour avec RLS
+const { data, error } = await supabase
+  .from('user_profiles')
+  .update({ bio: 'New bio' })
+  .eq('user_id', user.id)
+
+// Real-time subscriptions
+const subscription = supabase
+  .channel('mentoring_sessions')
+  .on('postgres_changes', {
+    event: 'INSERT',
+    schema: 'public',
+    table: 'mentoring_sessions'
+  }, (payload) => {
+    console.log('New session:', payload.new)
+  })
+  .subscribe()
 ```
-POST /ai/recommendations/career
-POST /ai/recommendations/scholarships
-POST /ai/recommendations/mentors
-POST /ai/chat
-GET  /ai/insights/:userId
+
+### 3. Supabase Edge Functions + OpenAI
+**Responsabilité** : IA et recommandations via Edge Functions
+
+**Fonctionnalités** :
+- Edge Functions TypeScript (serverless)
+- Intégration OpenAI API
+- Streaming des réponses
+- Cache intelligent
+- Déploiement automatique
+
+**Edge Function Example** :
+```typescript
+// supabase/functions/ai-recommendations/index.ts
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+serve(async (req) => {
+  const { user_id, preferences } = await req.json()
+  
+  // Récupération des données utilisateur
+  const supabase = createClient(
+    Deno.env.get('SUPABASE_URL') ?? '',
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+  )
+  
+  const { data: user } = await supabase
+    .from('user_profiles')
+    .select('*')
+    .eq('user_id', user_id)
+    .single()
+  
+  // Appel OpenAI
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${Deno.env.get('OPENAI_API_KEY')}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'gpt-4',
+      messages: [
+        {
+          role: 'system',
+          content: 'Tu es un conseiller en orientation académique...'
+        },
+        {
+          role: 'user',
+          content: `Recommandations pour: ${JSON.stringify(user)}`
+        }
+      ],
+      stream: true
+    })
+  })
+  
+  return new Response(response.body, {
+    headers: { 'Content-Type': 'text/plain' }
+  })
+})
 ```
 
-### 4. Mentor Service
-**Responsabilité** : Gestion du mentorat et des relations mentor-mentoré
+### 4. Supabase Storage
+**Responsabilité** : Stockage des fichiers et médias
 
-**Technologies** :
-- Node.js + Express + TypeScript
-- Socket.io pour le temps réel
-- Prisma ORM
+**Fonctionnalités** :
+- Stockage de fichiers sécurisé
+- Upload direct depuis le frontend
+- Redimensionnement d'images automatique
+- CDN intégré
+- Politiques d'accès granulaires
 
-**Endpoints principaux** :
-```
-GET    /mentors/available
-POST   /mentors/request
-GET    /mentors/sessions
-POST   /mentors/sessions/:id/feedback
-GET    /mentors/calendar
+**API Supabase Storage** :
+```typescript
+// Upload d'avatar
+const { data, error } = await supabase.storage
+  .from('avatars')
+  .upload(`${user.id}/avatar.jpg`, file)
+
+// Récupération d'image avec transformation
+const { data } = supabase.storage
+  .from('avatars')
+  .getPublicUrl(`${user.id}/avatar.jpg`, {
+    transform: {
+      width: 200,
+      height: 200,
+      resize: 'cover'
+    }
+  })
 ```
 
 ### 5. Community Service

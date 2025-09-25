@@ -18,55 +18,55 @@ Mois 11-12: Améliorations & Évolution
 ## 🏗️ Phase 1: Fondations (Mois 1-2)
 
 ### Objectifs
-- Mise en place de l'architecture technique
+- Mise en place de l'architecture Supabase
 - Configuration de l'environnement de développement
-- Implémentation des bases de sécurité
-- Création de l'infrastructure
+- Implémentation des bases de sécurité (RLS)
+- Création de l'infrastructure serverless
 
 ### Semaine 1-2: Architecture & Infrastructure
 - [ ] **Setup du projet**
   - Configuration des repositories Git
-  - Setup des environnements (dev, staging, prod)
-  - Configuration Docker et Docker Compose
+  - Setup Supabase (compte + projet)
+  - Configuration Vercel (compte + projet)
   - Setup CI/CD avec GitHub Actions
 
-- [ ] **Architecture backend**
-  - Configuration Node.js + Express + TypeScript
-  - Setup Prisma ORM avec PostgreSQL
-  - Configuration Redis pour le cache
-  - Setup des middlewares de sécurité
+- [ ] **Architecture Supabase**
+  - Configuration du projet Supabase
+  - Setup de la base de données PostgreSQL
+  - Configuration des politiques RLS
+  - Setup de l'authentification
 
 - [ ] **Architecture frontend**
   - Configuration Next.js 14 + TypeScript
-  - Setup Tailwind CSS + Framer Motion
-  - Configuration des outils de développement
+  - Setup Tailwind CSS + shadcn/ui
+  - Configuration Supabase client
   - Setup des composants de base
 
 ### Semaine 3-4: Base de données & Authentification
 - [ ] **Modélisation des données**
-  - Création du schéma Prisma
-  - Migration initiale de la base de données
+  - Création du schéma PostgreSQL
+  - Migration initiale avec Supabase
   - Setup des index et contraintes
   - Configuration des relations
 
 - [ ] **Système d'authentification**
-  - Implémentation JWT + Refresh Tokens
+  - Configuration Supabase Auth
   - Setup de l'authentification 2FA
   - Configuration OAuth2 (Google, LinkedIn)
-  - Implémentation du rate limiting
+  - Implémentation des politiques RLS
 
 ### Semaine 5-6: Sécurité & Monitoring
 - [ ] **Mesures de sécurité**
-  - Configuration HTTPS et certificats SSL
-  - Implémentation des headers de sécurité
+  - Configuration HTTPS automatique (Vercel)
+  - Implémentation des politiques RLS
   - Setup de la validation des entrées
   - Configuration du chiffrement des données
 
 - [ ] **Monitoring et logs**
-  - Setup Winston pour les logs
-  - Configuration Prometheus + Grafana
-  - Setup des alertes de sécurité
-  - Configuration des métriques de performance
+  - Configuration des logs Supabase
+  - Setup Vercel Analytics
+  - Configuration des alertes de sécurité
+  - Monitoring des métriques de performance
 
 ### Semaine 7-8: Tests & Documentation
 - [ ] **Tests automatisés**
@@ -86,18 +86,18 @@ Mois 11-12: Améliorations & Évolution
 ### Objectifs
 - Développement des fonctionnalités essentielles
 - Interface utilisateur responsive
-- Système de recommandations basique
-- Messagerie et communication
+- Système de recommandations IA basique
+- Communication temps réel
 
 ### Semaine 9-10: Gestion des utilisateurs
 - [ ] **Profils utilisateurs**
   - Création et édition de profil
-  - Upload et gestion d'avatars
+  - Upload et gestion d'avatars (Supabase Storage)
   - Système de préférences
   - Validation des données utilisateur
 
 - [ ] **Recherche d'utilisateurs**
-  - Moteur de recherche Elasticsearch
+  - Moteur de recherche PostgreSQL (Full-text)
   - Filtres avancés (compétences, localisation)
   - Pagination et tri des résultats
   - Cache des résultats de recherche
@@ -113,7 +113,7 @@ Mois 11-12: Améliorations & Évolution
   - Demande et acceptation de sessions
   - Intégration vidéo (WebRTC ou Zoom)
   - Système de feedback et évaluation
-  - Historique des sessions
+  - Historique des sessions (Real-time Supabase)
 
 ### Semaine 13-14: Communautés et forums
 - [ ] **Création de communautés**
@@ -125,7 +125,7 @@ Mois 11-12: Améliorations & Évolution
 - [ ] **Système de posts**
   - Création et édition de posts
   - Système de likes et commentaires
-  - Notifications en temps réel
+  - Notifications en temps réel (Supabase Real-time)
   - Modération du contenu
 
 ### Semaine 15-16: Interface utilisateur
@@ -150,8 +150,8 @@ Mois 11-12: Améliorations & Évolution
 - Base de données des bourses
 
 ### Semaine 17-18: Intelligence Artificielle
-- [ ] **Service IA Python**
-  - Configuration FastAPI
+- [ ] **Edge Functions IA**
+  - Configuration Supabase Edge Functions
   - Intégration OpenAI API
   - Modèles de recommandation
   - Chatbot conversationnel

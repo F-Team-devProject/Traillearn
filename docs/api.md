@@ -7,8 +7,8 @@ L'API de Traillearn est une API RESTful construite avec Node.js, Express et Type
 ## 🔗 Base URL
 
 - **Développement** : `http://localhost:3001/api`
-- **Staging** : `https://api-staging.Traillearn.com/api`
-- **Production** : `https://api.Traillearn.com/api`
+- **Staging** : `https://api-staging.traillearn.com/api`
+- **Production** : `https://api.traillearn.com/api`
 
 ## 🔐 Authentification
 
@@ -466,7 +466,7 @@ Authorization: Bearer <access-token>
         "scheduledAt": "2024-02-15T14:00:00Z",
         "duration": 60,
         "status": "scheduled",
-        "meetingUrl": "https://meet.Traillearn.com/session-uuid"
+        "meetingUrl": "https://meet.coachprotalent.com/session-uuid"
       }
     ],
     "pagination": {
@@ -787,7 +787,7 @@ Liste des événements.
         "endDate": "2024-02-20T19:30:00Z",
         "location": "En ligne",
         "isOnline": true,
-        "meetingUrl": "https://meet.Traillearn.com/webinar-ia",
+        "meetingUrl": "https://meet.coachprotalent.com/webinar-ia",
         "maxParticipants": 100,
         "currentParticipants": 45,
         "createdBy": {
@@ -930,7 +930,7 @@ X-RateLimit-Reset: 1640995200
 import { CoachProTalentAPI } from '@coachprotalent/sdk';
 
 const api = new CoachProTalentAPI({
-  baseURL: 'https://api.Traillearn.com',
+  baseURL: 'https://api.coachprotalent.com',
   apiKey: 'your-api-key'
 });
 
@@ -952,7 +952,7 @@ const profile = await api.users.getProfile();
 from coachprotalent import CoachProTalentAPI
 
 api = CoachProTalentAPI(
-    base_url='https://api.Traillearn.com',
+    base_url='https://api.coachprotalent.com',
     api_key='your-api-key'
 )
 
