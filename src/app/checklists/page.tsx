@@ -5,6 +5,7 @@ import { useAuthStore } from '@/store/authStore'
 import { checklistService } from '@/lib/checklistService'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { BackToDashboardButton } from '@/components/ui/back-button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -429,13 +430,18 @@ export default function ChecklistsPage() {
   return (
     <div className="container mx-auto p-6 max-w-6xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold flex items-center gap-3">
-          <ClipboardCheck className="h-8 w-8 text-blue-600" />
-          Checklists Administratives
-        </h1>
-        <p className="text-gray-600 mt-2">
-          Guides complets pour votre installation à l'étranger
-        </p>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-3">
+              <ClipboardCheck className="h-8 w-8 text-blue-600" />
+              📋 Checklists Administratives
+            </h1>
+            <p className="text-gray-600 mt-2">
+              Guides complets pour votre installation à l'étranger
+            </p>
+          </div>
+          <BackToDashboardButton />
+        </div>
       </div>
 
       <Tabs defaultValue="destinations" className="w-full">

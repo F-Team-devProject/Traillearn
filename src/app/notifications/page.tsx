@@ -5,6 +5,7 @@ import { useAuthStore } from '@/store/authStore'
 import { notificationService } from '@/lib/notificationService'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { BackToDashboardButton } from '@/components/ui/back-button'
 import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
@@ -338,16 +339,21 @@ export default function NotificationsPage() {
   return (
     <div className="container mx-auto p-6 max-w-6xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold flex items-center gap-3">
-          <Bell className="h-8 w-8 text-blue-600" />
-          Notifications
-          {unreadCount > 0 && (
-            <Badge className="bg-red-500 text-white">{unreadCount}</Badge>
-          )}
-        </h1>
-        <p className="text-gray-600 mt-2">
-          Gérez vos notifications et préférences de communication
-        </p>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-3">
+              <Bell className="h-8 w-8 text-blue-600" />
+              🔔 Notifications
+              {unreadCount > 0 && (
+                <Badge className="bg-red-500 text-white">{unreadCount}</Badge>
+              )}
+            </h1>
+            <p className="text-gray-600 mt-2">
+              Gérez vos notifications et préférences de communication
+            </p>
+          </div>
+          <BackToDashboardButton />
+        </div>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">

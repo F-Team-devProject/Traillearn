@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { GraduationCap, User, Shield, BookOpen } from 'lucide-react'
+import { GraduationCap, User, Shield, BookOpen, ArrowLeft } from 'lucide-react'
 
 const registerSchema = z.object({
   firstName: z.string().min(2, 'Le prénom doit contenir au moins 2 caractères'),
@@ -80,8 +80,21 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl">
-        <CardHeader className="text-center">
+      <div className="w-full max-w-2xl">
+        {/* Bouton retour */}
+        <div className="mb-4">
+          <Button 
+            variant="outline" 
+            onClick={() => router.push('/')}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Retour à l'accueil
+          </Button>
+        </div>
+        
+        <Card>
+          <CardHeader className="text-center">
           <div className="flex items-center justify-center mb-4">
             <GraduationCap className="h-8 w-8 text-primary mr-2" />
             <h1 className="text-2xl font-bold">Traillearn</h1>
@@ -236,6 +249,7 @@ export default function RegisterPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
+        </div>
+      </div>
   )
 }

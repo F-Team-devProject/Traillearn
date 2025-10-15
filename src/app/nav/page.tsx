@@ -16,7 +16,8 @@ import {
   Target,
   Plus,
   MessageCircle,
-  Bell
+  Bell,
+  ArrowLeft
 } from 'lucide-react'
 
 export default function NavigationPage() {
@@ -209,7 +210,17 @@ export default function NavigationPage() {
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">🧭 Navigation - Traillearn</h1>
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="outline" 
+              onClick={() => router.push('/')}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Retour à l'accueil
+            </Button>
+            <h1 className="text-3xl font-bold">🧭 Navigation - Traillearn</h1>
+          </div>
           <div className="flex space-x-2">
             {isAuthenticated ? (
               <>

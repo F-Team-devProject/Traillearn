@@ -5,6 +5,7 @@ import { useAuthStore } from '@/store/authStore'
 import { subscriptionService } from '@/lib/subscriptionService'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { BackToDashboardButton } from '@/components/ui/back-button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Separator } from '@/components/ui/separator'
@@ -345,13 +346,18 @@ export default function SubscriptionsPage() {
   return (
     <div className="container mx-auto p-6 max-w-7xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold flex items-center gap-3">
-          <Crown className="h-8 w-8 text-yellow-600" />
-          Abonnements et Niveaux
-        </h1>
-        <p className="text-gray-600 mt-2">
-          Choisissez votre plan d'abonnement et progressez dans les niveaux
-        </p>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-3">
+              <Crown className="h-8 w-8 text-yellow-600" />
+              👑 Abonnements et Niveaux
+            </h1>
+            <p className="text-gray-600 mt-2">
+              Choisissez votre plan d'abonnement et progressez dans les niveaux
+            </p>
+          </div>
+          <BackToDashboardButton />
+        </div>
       </div>
 
       <Tabs defaultValue="plans" className="w-full">

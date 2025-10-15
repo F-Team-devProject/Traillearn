@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useAuthStore } from '@/store/authStore'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { BackToDashboardButton } from '@/components/ui/back-button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -282,13 +283,18 @@ export default function IntegrationPage() {
   return (
     <div className="container mx-auto p-6 max-w-6xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold flex items-center gap-3">
-          <MapPin className="h-8 w-8 text-green-600" />
-          Aide à l'Intégration
-        </h1>
-        <p className="text-gray-600 mt-2">
-          Bénéficiez d'un accompagnement personnalisé pour votre intégration dans votre nouvelle destination
-        </p>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-3">
+              <MapPin className="h-8 w-8 text-green-600" />
+              🏠 Aide à l'Intégration
+            </h1>
+            <p className="text-gray-600 mt-2">
+              Bénéficiez d'un accompagnement personnalisé pour votre intégration dans votre nouvelle destination
+            </p>
+          </div>
+          <BackToDashboardButton />
+        </div>
       </div>
 
       <Tabs defaultValue="requests" className="w-full">
