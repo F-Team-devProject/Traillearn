@@ -1,5 +1,5 @@
 import { supabase } from './supabase'
-import { User, UserRole } from '@/types'
+import { User, UserRole, UserLevel, SubscriptionType } from '@/types'
 
 export interface AuthResponse {
   user: User | null
@@ -7,12 +7,14 @@ export interface AuthResponse {
 }
 
 export const authService = {
-  // Inscription avec rôle
+  // Inscription avec rôle (par défaut visiteur)
   async signUp(email: string, password: string, userData: {
     firstName: string
     lastName: string
-    role: UserRole
+    role?: UserRole
     countryCode?: string
+    phone?: string
+    referralCode?: string
   }): Promise<AuthResponse> {
     try {
       const { data, error } = await supabase.auth.signUp({
@@ -22,8 +24,10 @@ export const authService = {
           data: {
             first_name: userData.firstName,
             last_name: userData.lastName,
-            role: userData.role,
-            country_code: userData.countryCode
+            role: userData.role || 'visitor',
+            country_code: userData.countryCode,
+            phone: userData.phone,
+            referred_by: userData.referralCode
           }
         }
       })
@@ -33,13 +37,15 @@ export const authService = {
       }
 
       if (data.user) {
-        // Créer le profil utilisateur
+        // Générer un code de parrainage unique
+        const referralCode = `USER-${data.user.id.substring(0, 8).toUpperCase()}`
+
+        // Créer le profil utilisateur avec les nouvelles propriétés
         const { error: profileError } = await supabase
           .from('user_profiles')
           .insert({
             user_id: data.user.id,
             bio: '',
-            current_education_level: userData.role === 'student' ? 'high_school' : undefined,
             career_goals: [],
             interests: [],
             languages: [],
@@ -51,37 +57,57 @@ export const authService = {
           console.error('Error creating user profile:', profileError)
         }
 
-        // Si c'est un mentor, créer l'entrée mentor
-        if (userData.role === 'mentor') {
-          const { error: mentorError } = await supabase
-            .from('mentors')
-            .insert({
-              user_id: data.user.id,
-              expertise_areas: [],
-              experience_years: 0,
-              rating: 0,
-              studentsCount: 0,
-              is_verified: false
-            })
+        // Créer l'entrée utilisateur avec les nouvelles propriétés
+        const { error: userError } = await supabase
+          .from('users')
+          .insert({
+            id: data.user.id,
+            email: data.user.email!,
+            first_name: userData.firstName,
+            last_name: userData.lastName,
+            role: userData.role || 'visitor',
+            is_student: false,
+            is_mentor: false,
+            student_status: 'inactive',
+            mentor_status: 'inactive',
+            points: 0,
+            level: 'bronze',
+            referral_code: referralCode,
+            referred_by: userData.referralCode || null,
+            subscription_type: 'free',
+            phone: userData.phone,
+            country_code: userData.countryCode,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            isActive: true
+          })
 
-          if (mentorError) {
-            console.error('Error creating mentor profile:', mentorError)
-          }
+        if (userError) {
+          console.error('Error creating user entry:', userError)
         }
 
         return {
           user: {
             id: data.user.id,
             email: data.user.email!,
+            name: `${userData.firstName} ${userData.lastName}`,
             first_name: userData.firstName,
             last_name: userData.lastName,
-            role: userData.role,
+            role: userData.role || 'visitor',
+            is_student: false,
+            is_mentor: false,
+            student_status: 'inactive',
+            mentor_status: 'inactive',
+            points: 0,
+            level: 'bronze',
+            referral_code: referralCode,
+            referred_by: userData.referralCode || undefined,
+            subscription_type: 'free',
+            phone: userData.phone,
             country_code: userData.countryCode,
-            profile_completed: false,
-            email_verified: false,
-            two_factor_enabled: false,
             created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
+            isActive: true
           },
           error: null
         }
@@ -159,6 +185,119 @@ export const authService = {
       return { user: userData, error: null }
     } catch (error) {
       return { user: null, error: 'An unexpected error occurred' }
+    }
+  },
+
+  // Activer le statut étudiant pour un visiteur
+  async activateStudentRole(userId: string): Promise<{ success: boolean; error?: string }> {
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({
+          is_student: true,
+          student_status: 'active',
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', userId)
+
+      if (error) {
+        return { success: false, error: error.message }
+      }
+
+      return { success: true }
+    } catch (error) {
+      return { success: false, error: 'An unexpected error occurred' }
+    }
+  },
+
+  // Demander le statut mentor
+  async requestMentorRole(userId: string, mentorData: {
+    specialties: string[]
+    experience: string
+    education: string
+    languages: string[]
+    timezone: string
+    countries_served: string[]
+    capacity_per_month: number
+  }): Promise<{ success: boolean; error?: string }> {
+    try {
+      // Mettre à jour le statut mentor en attente
+      const { error: userError } = await supabase
+        .from('users')
+        .update({
+          is_mentor: true,
+          mentor_status: 'pending',
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', userId)
+
+      if (userError) {
+        return { success: false, error: userError.message }
+      }
+
+      // Créer le profil mentor
+      const { error: mentorError } = await supabase
+        .from('mentors')
+        .insert({
+          user_id: userId,
+          specialties: mentorData.specialties,
+          experience: mentorData.experience,
+          education: mentorData.education,
+          languages: mentorData.languages,
+          timezone: mentorData.timezone,
+          countries_served: mentorData.countries_served,
+          capacity_per_month: mentorData.capacity_per_month,
+          is_verified: false,
+          interview_completed: false,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+
+      if (mentorError) {
+        return { success: false, error: mentorError.message }
+      }
+
+      return { success: true }
+    } catch (error) {
+      return { success: false, error: 'An unexpected error occurred' }
+    }
+  },
+
+  // Valider un mentor (admin seulement)
+  async validateMentor(userId: string, approved: boolean, notes?: string): Promise<{ success: boolean; error?: string }> {
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({
+          mentor_status: approved ? 'approved' : 'rejected',
+          mentor_validation_date: new Date().toISOString(),
+          mentor_validation_notes: notes,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', userId)
+
+      if (error) {
+        return { success: false, error: error.message }
+      }
+
+      if (approved) {
+        // Mettre à jour le profil mentor
+        const { error: mentorError } = await supabase
+          .from('mentors')
+          .update({
+            is_verified: true,
+            updated_at: new Date().toISOString()
+          })
+          .eq('user_id', userId)
+
+        if (mentorError) {
+          return { success: false, error: mentorError.message }
+        }
+      }
+
+      return { success: true }
+    } catch (error) {
+      return { success: false, error: 'An unexpected error occurred' }
     }
   },
 

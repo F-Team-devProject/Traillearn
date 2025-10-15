@@ -19,10 +19,9 @@ const registerSchema = z.object({
   email: z.string().email('Email invalide'),
   password: z.string().min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
   confirmPassword: z.string(),
-  role: z.enum(['student', 'mentor'], {
-    required_error: 'Veuillez sélectionner un rôle'
-  }),
-  countryCode: z.string().optional()
+  phone: z.string().optional(),
+  countryCode: z.string().optional(),
+  referralCode: z.string().optional()
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Les mots de passe ne correspondent pas",
   path: ["confirmPassword"],
@@ -30,22 +29,7 @@ const registerSchema = z.object({
 
 type RegisterFormData = z.infer<typeof registerSchema>
 
-const roleOptions = [
-  {
-    value: 'student',
-    label: 'Étudiant',
-    description: 'Je cherche de l\'orientation et des conseils',
-    icon: BookOpen,
-    color: 'text-blue-600'
-  },
-  {
-    value: 'mentor',
-    label: 'Mentor',
-    description: 'Je veux partager mon expérience et aider',
-    icon: User,
-    color: 'text-green-600'
-  }
-]
+// Plus besoin de sélection de rôle - tout le monde commence comme visiteur
 
 const countries = [
   { code: 'FRA', name: 'France' },
@@ -63,7 +47,6 @@ const countries = [
 export default function RegisterPage() {
   const router = useRouter()
   const { signUp, isLoading } = useAuthStore()
-  const [selectedRole, setSelectedRole] = useState<string>('')
   const [error, setError] = useState<string>('')
 
   const {
@@ -81,12 +64,14 @@ export default function RegisterPage() {
     const result = await signUp(data.email, data.password, {
       firstName: data.firstName,
       lastName: data.lastName,
-      role: data.role as 'student' | 'mentor',
-      countryCode: data.countryCode
+      role: 'visitor', // Par défaut, tout le monde commence comme visiteur
+      phone: data.phone,
+      countryCode: data.countryCode,
+      referralCode: data.referralCode
     })
 
     if (result.success) {
-      // Redirection vers la page d'accueil qui gérera la redirection selon le rôle
+      // Redirection vers la page d'accueil
       router.push('/')
     } else {
       setError(result.error || 'Erreur lors de l\'inscription')
@@ -103,7 +88,7 @@ export default function RegisterPage() {
           </div>
           <CardTitle>Créer votre compte</CardTitle>
           <CardDescription>
-            Rejoignez la communauté Traillearn et commencez votre parcours académique
+            Rejoignez la communauté Traillearn en tant que visiteur. Vous pourrez activer vos statuts étudiant et mentor plus tard.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -113,39 +98,18 @@ export default function RegisterPage() {
                 {error}
               </div>
             )}
-            {/* Sélection du rôle */}
-            <div className="space-y-4">
-              <Label className="text-base font-semibold">Je suis :</Label>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {roleOptions.map((role) => {
-                  const Icon = role.icon
-                  return (
-                    <div
-                      key={role.value}
-                      className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                        selectedRole === role.value
-                          ? 'border-primary bg-primary/5'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                      onClick={() => {
-                        setSelectedRole(role.value)
-                        setValue('role', role.value as 'student' | 'mentor')
-                      }}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <Icon className={`h-6 w-6 ${role.color}`} />
-                        <div>
-                          <h3 className="font-semibold">{role.label}</h3>
-                          <p className="text-sm text-muted-foreground">{role.description}</p>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })}
+            {/* Information sur les rôles */}
+            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="flex items-start space-x-3">
+                <User className="h-5 w-5 text-blue-600 mt-0.5" />
+                <div>
+                  <h3 className="font-semibold text-blue-900">Compte Visiteur</h3>
+                  <p className="text-sm text-blue-700 mt-1">
+                    Vous commencez en tant que visiteur. Vous pourrez activer vos statuts étudiant et mentor 
+                    dans votre profil après l'inscription.
+                  </p>
+                </div>
               </div>
-              {errors.role && (
-                <p className="text-sm text-destructive">{errors.role.message}</p>
-              )}
             </div>
 
             {/* Informations personnelles */}
@@ -188,20 +152,43 @@ export default function RegisterPage() {
               )}
             </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="phone">Téléphone (optionnel)</Label>
+                <Input
+                  id="phone"
+                  {...register('phone')}
+                  placeholder="+33123456789"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="countryCode">Pays (optionnel)</Label>
+                <Select onValueChange={(value) => setValue('countryCode', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sélectionner votre pays" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {countries.map((country) => (
+                      <SelectItem key={country.code} value={country.code}>
+                        {country.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
             <div className="space-y-2">
-              <Label htmlFor="countryCode">Pays (optionnel)</Label>
-              <Select onValueChange={(value) => setValue('countryCode', value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner votre pays" />
-                </SelectTrigger>
-                <SelectContent>
-                  {countries.map((country) => (
-                    <SelectItem key={country.code} value={country.code}>
-                      {country.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label htmlFor="referralCode">Code de parrainage (optionnel)</Label>
+              <Input
+                id="referralCode"
+                {...register('referralCode')}
+                placeholder="USER-ABC123"
+              />
+              <p className="text-xs text-gray-500">
+                Entrez le code de parrainage si vous avez été invité par un mentor
+              </p>
             </div>
 
             <div className="space-y-2">

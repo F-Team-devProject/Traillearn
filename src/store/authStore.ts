@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { User } from '@/types'
+import { User, UserRole, UserLevel, SubscriptionType } from '@/types'
 import { authService } from '@/lib/authService'
 import { seedDemoData } from '@/lib/localStorage'
 import { config } from '@/lib/config'
@@ -11,8 +11,10 @@ interface AuthState {
   signUp: (email: string, password: string, userData: {
     firstName: string
     lastName: string
-    role: 'admin' | 'mentor' | 'student'
+    role?: UserRole
     countryCode?: string
+    phone?: string
+    referralCode?: string
   }) => Promise<{ success: boolean; error?: string }>
   signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string }>
   signOut: () => Promise<void>
@@ -21,6 +23,18 @@ interface AuthState {
     firstName: string
     lastName: string
   }) => Promise<{ success: boolean; error?: string }>
+  // Nouvelles méthodes pour les rôles multiples
+  activateStudentRole: () => Promise<{ success: boolean; error?: string }>
+  requestMentorRole: (mentorData: {
+    specialties: string[]
+    experience: string
+    education: string
+    languages: string[]
+    timezone: string
+    countries_served: string[]
+    capacity_per_month: number
+  }) => Promise<{ success: boolean; error?: string }>
+  validateMentor: (userId: string, approved: boolean, notes?: string) => Promise<{ success: boolean; error?: string }>
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -126,6 +140,75 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       })
       
       return { success: true }
+    } catch (error) {
+      set({ isLoading: false })
+      return { success: false, error: 'An unexpected error occurred' }
+    }
+  },
+
+  // Nouvelles méthodes pour les rôles multiples
+  activateStudentRole: async () => {
+    const { user } = get()
+    if (!user) return { success: false, error: 'No user logged in' }
+
+    set({ isLoading: true })
+    try {
+      const result = await authService.activateStudentRole(user.id)
+      
+      if (result.success && user) {
+        set({
+          user: {
+            ...user,
+            is_student: true,
+            student_status: 'active'
+          },
+          isLoading: false
+        })
+      } else {
+        set({ isLoading: false })
+      }
+      
+      return result
+    } catch (error) {
+      set({ isLoading: false })
+      return { success: false, error: 'An unexpected error occurred' }
+    }
+  },
+
+  requestMentorRole: async (mentorData) => {
+    const { user } = get()
+    if (!user) return { success: false, error: 'No user logged in' }
+
+    set({ isLoading: true })
+    try {
+      const result = await authService.requestMentorRole(user.id, mentorData)
+      
+      if (result.success && user) {
+        set({
+          user: {
+            ...user,
+            is_mentor: true,
+            mentor_status: 'pending'
+          },
+          isLoading: false
+        })
+      } else {
+        set({ isLoading: false })
+      }
+      
+      return result
+    } catch (error) {
+      set({ isLoading: false })
+      return { success: false, error: 'An unexpected error occurred' }
+    }
+  },
+
+  validateMentor: async (userId, approved, notes) => {
+    set({ isLoading: true })
+    try {
+      const result = await authService.validateMentor(userId, approved, notes)
+      set({ isLoading: false })
+      return result
     } catch (error) {
       set({ isLoading: false })
       return { success: false, error: 'An unexpected error occurred' }
