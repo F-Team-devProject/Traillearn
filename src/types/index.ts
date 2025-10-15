@@ -289,19 +289,32 @@ export interface IntegrationChecklistItem {
 
 export interface Forum {
   id: string
-  name: string
+  title: string
   description: string
-  category: 'country' | 'university' | 'field' | 'general'
-  category_value: string // nom du pays, université, domaine
+  category: string
+  country?: string
+  school?: string
+  domain?: string
+  is_private: boolean
+  tags: string[]
   owner_id: string
-  moderator_ids: string[]
-  is_public: boolean
-  status: 'pending' | 'approved' | 'rejected'
+  moderator_id?: string
+  status: 'pending' | 'active' | 'rejected' | 'archived'
   admin_notes?: string
-  members_count: number
-  posts_count: number
+  validated_by?: string
+  validated_at?: string
   created_at: string
   updated_at: string
+  owner?: {
+    first_name: string
+    last_name: string
+    profile_picture?: string
+  }
+  moderator?: {
+    first_name: string
+    last_name: string
+    profile_picture?: string
+  }
 }
 
 export interface ForumPost {
@@ -311,13 +324,30 @@ export interface ForumPost {
   title: string
   content: string
   is_pinned: boolean
-  is_locked: boolean
-  likes_count: number
-  replies_count: number
-  status: 'active' | 'hidden' | 'deleted'
-  moderation_notes?: string
+  tags?: string[]
+  parent_post_id?: string
+  status: 'published' | 'pending' | 'deleted'
+  moderation_reason?: string
+  views?: number
   created_at: string
   updated_at: string
+  author?: {
+    first_name: string
+    last_name: string
+    profile_picture?: string
+  }
+  replies?: Array<{
+    id: string
+    title: string
+    content: string
+    author_id: string
+    created_at: string
+    author: {
+      first_name: string
+      last_name: string
+      profile_picture?: string
+    }
+  }>
 }
 
 export interface EventExtended {
