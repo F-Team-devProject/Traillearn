@@ -5,8 +5,13 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Traillearn - Plateforme de Réseautage Académique International',
-  description: 'Accompagnement des jeunes dans leur orientation académique et professionnelle avec un focus sur la mobilité internationale.',
+  title: 'Traillearn - S\'orienter et s\'intégrer à l\'international',
+  description: 'Grâce à une IA, des mentors et une communauté pour trouver études, bourses, événements et repères locaux.',
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
 }
 
 export default function RootLayout({

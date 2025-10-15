@@ -1,7 +1,7 @@
 // Configuration de l'application
 export const config = {
   // Mode de développement - utilise localStorage au lieu de Supabase
-  DEV_MODE: true,
+  DEV_MODE: process.env.NODE_ENV === 'development',
   
   // URLs de l'application
   APP_URL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',

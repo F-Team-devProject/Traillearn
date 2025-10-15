@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useAuthStore } from '@/store/authStore'
-import { eventService } from '@/lib/eventService'
+import { eventService, EventFilters } from '@/lib/eventService'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { BackToDashboardButton } from '@/components/ui/back-button'
@@ -22,7 +22,7 @@ import {
   Building,
   GraduationCap,
   Briefcase,
-  Microphone,
+  Mic,
   Video,
   Plus,
   Search,
@@ -48,9 +48,9 @@ export default function EventsPage() {
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState<EventExtended | null>(null)
   const [showRegistrationForm, setShowRegistrationForm] = useState(false)
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<EventFilters>({
     category: '',
-    type: '',
+    type: undefined,
     country: '',
     search: '',
     status: 'upcoming'
@@ -250,7 +250,7 @@ export default function EventsPage() {
       case 'bootcamp':
         return <GraduationCap className="h-4 w-4 text-green-500" />
       case 'conference':
-        return <Microphone className="h-4 w-4 text-purple-500" />
+        return <Mic className="h-4 w-4 text-purple-500" />
       case 'workshop':
         return <Building className="h-4 w-4 text-orange-500" />
       default:
