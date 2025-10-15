@@ -14,7 +14,9 @@ import {
   BookOpen,
   Settings,
   Target,
-  Plus
+  Plus,
+  MessageCircle,
+  Bell
 } from 'lucide-react'
 
 export default function NavigationPage() {

@@ -9,16 +9,13 @@ import { GraduationCap, Users, BookOpen, Globe } from 'lucide-react'
 
 export default function HomePage() {
   const router = useRouter()
-  const { user, isAuthenticated, getCurrentUser, initDemoData } = useAuthStore()
+  const { user, isAuthenticated, getCurrentUser } = useAuthStore()
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Initialiser les données de démonstration
-    initDemoData()
-    
     // Récupérer l'utilisateur actuel
     getCurrentUser().finally(() => setIsLoading(false))
-  }, [getCurrentUser, initDemoData])
+  }, [getCurrentUser])
 
   useEffect(() => {
     if (isAuthenticated && user) {
