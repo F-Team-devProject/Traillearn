@@ -96,20 +96,20 @@ export default function NavigationPage() {
       role: 'mentor'
     },
     {
-      title: 'Dashboard Étudiant',
-      description: 'Interface étudiant',
+      title: 'Dashboard Profil',
+      description: 'Tableau de bord unifié',
       icon: BookOpen,
-      path: '/student/dashboard',
+      path: '/profile/dashboard',
       color: 'bg-indigo-50 text-indigo-600',
-      role: 'student'
+      requiresAuth: true
     },
     {
-      title: 'Profil Étudiant',
-      description: 'Gérer son profil',
+      title: 'Gestion des Rôles',
+      description: 'Activer étudiant/mentor',
       icon: User,
-      path: '/student/profile',
+      path: '/profile/roles',
       color: 'bg-indigo-50 text-indigo-600',
-      role: 'student'
+      requiresAuth: true
     },
     {
       title: 'Objectifs Étudiant',
@@ -126,6 +126,80 @@ export default function NavigationPage() {
       path: '/mentor/sessions/new',
       color: 'bg-yellow-50 text-yellow-600',
       role: 'mentor'
+    },
+    {
+      title: 'Bourses',
+      description: 'Rechercher des bourses',
+      icon: BookOpen,
+      path: '/scholarships',
+      color: 'bg-blue-50 text-blue-600'
+    },
+    {
+      title: 'IA d\'Orientation',
+      description: 'Recommandations IA',
+      icon: Target,
+      path: '/ai-orientation',
+      color: 'bg-purple-50 text-purple-600'
+    },
+    {
+      title: 'Événements',
+      description: 'Webinaires et bootcamps',
+      icon: Settings,
+      path: '/events',
+      color: 'bg-green-50 text-green-600'
+    },
+    {
+      title: 'Forums',
+      description: 'Discussions communautaires',
+      icon: User,
+      path: '/forums',
+      color: 'bg-orange-50 text-orange-600'
+    },
+    {
+      title: 'Intégration',
+      description: 'Aide à l\'intégration',
+      icon: BookOpen,
+      path: '/integration',
+      color: 'bg-teal-50 text-teal-600'
+    },
+    {
+      title: 'Alertes Emploi',
+      description: 'Recherche d\'emploi',
+      icon: Plus,
+      path: '/job-alerts',
+      color: 'bg-indigo-50 text-indigo-600'
+    },
+    {
+      title: 'Notifications',
+      description: 'Gestion des notifications',
+      icon: Settings,
+      path: '/notifications',
+      color: 'bg-pink-50 text-pink-600',
+      requiresAuth: true
+    },
+    {
+      title: 'Abonnements',
+      description: 'Gestion des abonnements',
+      icon: User,
+      path: '/subscriptions',
+      color: 'bg-yellow-50 text-yellow-600',
+      requiresAuth: true
+    },
+    {
+      title: 'Feedback',
+      description: 'Évaluer et noter',
+      icon: Target,
+      path: '/feedback',
+      color: 'bg-red-50 text-red-600',
+      requiresAuth: true
+    },
+    {
+      title: 'Checklists',
+      description: 'Démarches administratives',
+      icon: BookOpen,
+      path: '/checklists',
+      color: 'bg-gray-50 text-gray-600',
+      requiresAuth: true
     }
   ]
 

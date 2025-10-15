@@ -23,18 +23,11 @@ export default function HomePage() {
   useEffect(() => {
     if (isAuthenticated && user) {
       // Rediriger vers le dashboard approprié selon le rôle
-      switch (user.role) {
-        case 'admin':
-          router.push('/admin/dashboard')
-          break
-        case 'mentor':
-          router.push('/mentor/dashboard')
-          break
-        case 'student':
-          router.push('/student/dashboard')
-          break
-        default:
-          router.push('/auth/login')
+      if (user.role === 'admin') {
+        router.push('/admin/dashboard')
+      } else {
+        // Tous les visiteurs (avec ou sans rôles activés) vont au dashboard profil
+        router.push('/profile/dashboard')
       }
     }
   }, [isAuthenticated, user, router])
@@ -95,12 +88,12 @@ export default function HomePage() {
         <div className="text-center mb-16">
           <div className="animate-fade-in-up">
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-              Votre avenir académique
-              <span className="text-primary block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">commence ici</span>
+              S'orienter et s'intégrer
+              <span className="text-primary block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">à l'international</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Plateforme de réseautage académique international pour accompagner les jeunes 
-              dans leur orientation et faciliter la mobilité internationale.
+              Grâce à une IA, des mentors et une communauté pour trouver études, bourses, 
+              événements et repères locaux.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up-delay">
@@ -124,50 +117,50 @@ export default function HomePage() {
 
         {/* Features */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-          <Card className="hover-lift group cursor-pointer">
+          <Card className="hover-lift group cursor-pointer" onClick={() => router.push('/scholarships')}>
             <CardHeader>
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
-                <Users className="h-8 w-8 text-white" />
-              </div>
-              <CardTitle className="group-hover:text-blue-600 transition-colors">Réseautage</CardTitle>
-              <CardDescription>
-                Connectez-vous avec des mentors, étudiants et professionnels du monde entier
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="hover-lift group cursor-pointer">
-            <CardHeader>
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
                 <BookOpen className="h-8 w-8 text-white" />
               </div>
-              <CardTitle className="group-hover:text-purple-600 transition-colors">Orientation</CardTitle>
+              <CardTitle className="group-hover:text-blue-600 transition-colors">Bourses</CardTitle>
               <CardDescription>
-                Recevez des conseils personnalisés pour votre orientation académique et professionnelle
+                Trouvez et filtrez des bourses d'études avec alertes deadlines et favoris
               </CardDescription>
             </CardHeader>
           </Card>
 
-          <Card className="hover-lift group cursor-pointer">
+          <Card className="hover-lift group cursor-pointer" onClick={() => router.push('/mentors')}>
+            <CardHeader>
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
+                <Users className="h-8 w-8 text-white" />
+              </div>
+              <CardTitle className="group-hover:text-purple-600 transition-colors">Mentors</CardTitle>
+              <CardDescription>
+                Trouvez des mentors pour votre métier, orientation scolaire et intégration
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="hover-lift group cursor-pointer" onClick={() => router.push('/ai-orientation')}>
             <CardHeader>
               <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
                 <Globe className="h-8 w-8 text-white" />
               </div>
-              <CardTitle className="group-hover:text-green-600 transition-colors">Mobilité Internationale</CardTitle>
+              <CardTitle className="group-hover:text-green-600 transition-colors">IA d'Orientation</CardTitle>
               <CardDescription>
                 Découvrez les opportunités d'études et de carrière à l'international
               </CardDescription>
             </CardHeader>
           </Card>
 
-          <Card className="hover-lift group cursor-pointer">
+          <Card className="hover-lift group cursor-pointer" onClick={() => router.push('/integration')}>
             <CardHeader>
               <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
                 <GraduationCap className="h-8 w-8 text-white" />
               </div>
-              <CardTitle className="group-hover:text-orange-600 transition-colors">IA Intelligente</CardTitle>
+              <CardTitle className="group-hover:text-orange-600 transition-colors">Intégration</CardTitle>
               <CardDescription>
-                Bénéficiez de recommandations personnalisées grâce à l'intelligence artificielle
+                Aide à l'intégration sociale et culturelle dans votre ville de destination
               </CardDescription>
             </CardHeader>
           </Card>
@@ -177,7 +170,7 @@ export default function HomePage() {
         <div className="bg-primary rounded-lg p-8 text-center text-white">
           <h2 className="text-3xl font-bold mb-4">Prêt à commencer votre parcours ?</h2>
           <p className="text-xl mb-6 opacity-90">
-            Rejoignez des milliers d'étudiants qui ont trouvé leur voie grâce à Traillearn
+            Le chemin le plus court vers bourses, mentors et opportunités
           </p>
           <Button 
             size="lg" 

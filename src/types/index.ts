@@ -6,10 +6,10 @@ export interface User {
   last_name?: string
   role: UserRole
   // Nouvelles propriétés pour le système multi-rôles
-  is_student?: boolean
-  is_mentor?: boolean
-  student_status?: 'pending' | 'active' | 'inactive'
-  mentor_status?: 'pending' | 'approved' | 'rejected' | 'inactive'
+  is_student?: boolean // Rôle étudiant activé (pour apprendre d'un mentor)
+  is_mentor?: boolean // Rôle mentor activé (pour enseigner)
+  student_status?: 'pending' | 'active' | 'inactive' // Statut du rôle étudiant
+  mentor_status?: 'pending' | 'approved' | 'rejected' | 'inactive' // Statut du rôle mentor (validation admin requise)
   mentor_validation_date?: string
   mentor_validation_notes?: string
   // Système de points et niveaux
