@@ -33,6 +33,204 @@ const saveToStorage = <T>(key: string, data: T[]): void => {
   }
 }
 
+// Fonction pour initialiser les données de test
+export const initDemoData = () => {
+  if (typeof window === 'undefined') return
+  
+  // Vérifier si les données sont déjà initialisées
+  const existingUsers = getFromStorage<User>(KEYS.USERS)
+  if (existingUsers.length > 0) return
+  
+  console.log('🎯 Initialisation des données de test Traillearn...')
+  
+  // Créer les utilisateurs de test
+  const testUsers: Omit<User, 'id' | 'created_at' | 'updated_at'>[] = [
+    {
+      email: 'admin@traillearn.com',
+      password: 'AdminTraillearn2024!',
+      name: 'Admin Traillearn',
+      role: 'admin',
+      is_student: true,
+      is_mentor: true,
+      student_status: 'active',
+      mentor_status: 'approved',
+      points: 1000,
+      level: 'platinum',
+      subscription_type: 'premium',
+      referral_code: 'ADMIN-001',
+      profile_completed: true,
+      country_code: 'FR'
+    },
+    {
+      email: 'visitor1@traillearn.com',
+      password: 'visitor123',
+      name: 'Jean Dupont',
+      role: 'visitor',
+      is_student: true,
+      is_mentor: true,
+      student_status: 'active',
+      mentor_status: 'approved',
+      points: 500,
+      level: 'gold',
+      subscription_type: 'pro',
+      referral_code: 'VISITOR-002',
+      profile_completed: true,
+      country_code: 'FR'
+    },
+    {
+      email: 'mentor@traillearn.com',
+      password: 'mentor123',
+      name: 'Marie Martin',
+      role: 'visitor',
+      is_student: false,
+      is_mentor: true,
+      student_status: 'inactive',
+      mentor_status: 'approved',
+      points: 300,
+      level: 'silver',
+      subscription_type: 'plus',
+      referral_code: 'MENTOR-003',
+      profile_completed: true,
+      country_code: 'FR'
+    },
+    {
+      email: 'student@traillearn.com',
+      password: 'student123',
+      name: 'Pierre Durand',
+      role: 'visitor',
+      is_student: true,
+      is_mentor: false,
+      student_status: 'active',
+      mentor_status: 'inactive',
+      points: 200,
+      level: 'bronze',
+      subscription_type: 'free',
+      referral_code: 'STUDENT-004',
+      profile_completed: true,
+      country_code: 'FR'
+    },
+    {
+      email: 'visitor@traillearn.com',
+      password: 'visitor123',
+      name: 'Sophie Leroy',
+      role: 'visitor',
+      is_student: false,
+      is_mentor: false,
+      student_status: 'inactive',
+      mentor_status: 'inactive',
+      points: 100,
+      level: 'bronze',
+      subscription_type: 'free',
+      referral_code: 'VISITOR-005',
+      profile_completed: false,
+      country_code: 'FR'
+    }
+  ]
+  
+  // Créer les utilisateurs et récupérer leurs IDs
+  const createdUsers: User[] = []
+  testUsers.forEach(userData => {
+    const user = localUserAPI.createUser(userData)
+    createdUsers.push(user)
+  })
+  
+  // Créer des mentors de test
+  const testMentors: Omit<Mentor, 'id' | 'created_at' | 'updated_at'>[] = [
+    {
+      user_id: createdUsers.find(u => u.email === 'visitor1@traillearn.com')?.id || '',
+      specialties: ['Data Science', 'Machine Learning', 'Intelligence Artificielle'],
+      languages: ['French', 'English'],
+      timezone: 'Europe/Paris',
+      capacity_month: 15,
+      hourly_rate: 45,
+      currency: 'EUR',
+      experience_years: 5,
+      education: 'Master en Data Science',
+      certifications: ['Certified Data Scientist', 'AWS Certified'],
+      bio: 'Expert en data science avec 5 ans d\'expérience dans le machine learning et l\'intelligence artificielle',
+      is_verified: true,
+      rating: 4.8,
+      total_sessions: 120,
+      studentsCount: 120,
+      isAvailable: true
+    },
+    {
+      user_id: createdUsers.find(u => u.email === 'mentor@traillearn.com')?.id || '',
+      specialties: ['Cybersécurité', 'Cloud Computing', 'DevOps'],
+      languages: ['French', 'English', 'Spanish'],
+      timezone: 'Europe/Paris',
+      capacity_month: 12,
+      hourly_rate: 50,
+      currency: 'EUR',
+      experience_years: 7,
+      education: 'Master en Cybersécurité',
+      certifications: ['CISSP', 'CEH', 'Security+'],
+      bio: 'Spécialiste en cybersécurité et sécurité des réseaux avec expertise en cloud computing',
+      is_verified: true,
+      rating: 4.9,
+      total_sessions: 150,
+      studentsCount: 150,
+      isAvailable: true
+    }
+  ]
+  
+  // Ajouter des mentors supplémentaires
+  const additionalMentors: Omit<Mentor, 'id' | 'created_at' | 'updated_at'>[] = [
+    {
+      user_id: createdUsers.find(u => u.email === 'student@traillearn.com')?.id || '',
+      specialties: ['Développement Web', 'React', 'Node.js'],
+      languages: ['French', 'English'],
+      timezone: 'Europe/Paris',
+      capacity_month: 10,
+      hourly_rate: 35,
+      currency: 'EUR',
+      experience_years: 3,
+      education: 'Développeur Full Stack',
+      certifications: ['React Certified', 'Node.js Certified'],
+      bio: 'Développeur full stack passionné par les technologies web modernes',
+      is_verified: true,
+      rating: 4.6,
+      total_sessions: 80,
+      studentsCount: 80,
+      isAvailable: true
+    },
+    {
+      user_id: createdUsers.find(u => u.email === 'visitor@traillearn.com')?.id || '',
+      specialties: ['Marketing Digital', 'E-commerce', 'SEO'],
+      languages: ['French', 'English', 'German'],
+      timezone: 'Europe/Paris',
+      capacity_month: 8,
+      hourly_rate: 30,
+      currency: 'EUR',
+      experience_years: 4,
+      education: 'Master en Marketing Digital',
+      certifications: ['Google Analytics', 'Facebook Ads Certified'],
+      bio: 'Expert en marketing digital et stratégies e-commerce',
+      is_verified: true,
+      rating: 4.5,
+      total_sessions: 60,
+      studentsCount: 60,
+      isAvailable: true
+    }
+  ]
+  
+  testMentors.forEach(mentorData => {
+    localMentorAPI.createMentor(mentorData)
+  })
+  
+  additionalMentors.forEach(mentorData => {
+    localMentorAPI.createMentor(mentorData)
+  })
+  
+  console.log('✅ Données de test initialisées avec succès!')
+  console.log('👥 Comptes créés:')
+  console.log('• admin@traillearn.com (Admin)')
+  console.log('• visitor1@traillearn.com (Double profil)')
+  console.log('• mentor@traillearn.com (Mentor)')
+  console.log('• student@traillearn.com (Étudiant)')
+  console.log('• visitor@traillearn.com (Visiteur)')
+}
+
 // API locale pour les utilisateurs
 export const localUserAPI = {
   // Créer un utilisateur
@@ -318,158 +516,100 @@ export const seedDemoData = () => {
   // Créer un admin
   const admin = localUserAPI.createUser({
     email: 'admin@traillearn.com',
-    first_name: 'Admin',
-    last_name: 'Traillearn',
+    password: 'AdminTraillearn2024!',
+    name: 'Admin Traillearn',
     role: 'admin',
+    is_student: true,
+    is_mentor: true,
+    student_status: 'active',
+    mentor_status: 'approved',
+    points: 1000,
+    level: 'platinum',
+    subscription_type: 'premium',
+    referral_code: 'ADMIN-001',
     profile_completed: true,
-    email_verified: true,
-    two_factor_enabled: false
+    country_code: 'FR'
   })
 
-  // Créer des mentors
-  const mentor1 = localUserAPI.createUser({
-    email: 'mentor1@traillearn.com',
-    first_name: 'Sarah',
-    last_name: 'Johnson',
-    role: 'mentor',
-    country_code: 'USA',
+  // Créer visitor1 (double profil)
+  const visitor1 = localUserAPI.createUser({
+    email: 'visitor1@traillearn.com',
+    password: 'visitor123',
+    name: 'Jean Dupont',
+    role: 'visitor',
+    is_student: true,
+    is_mentor: true,
+    student_status: 'active',
+    mentor_status: 'approved',
+    points: 500,
+    level: 'gold',
+    subscription_type: 'pro',
+    referral_code: 'VISITOR-002',
     profile_completed: true,
-    email_verified: true,
-    two_factor_enabled: false
+    country_code: 'FR'
   })
 
-  const mentor2 = localUserAPI.createUser({
-    email: 'mentor2@traillearn.com',
-    first_name: 'Ahmed',
-    last_name: 'Benali',
-    role: 'mentor',
-    country_code: 'FRA',
+  // Créer mentor
+  const mentor = localUserAPI.createUser({
+    email: 'mentor@traillearn.com',
+    password: 'mentor123',
+    name: 'Marie Martin',
+    role: 'visitor',
+    is_student: false,
+    is_mentor: true,
+    student_status: 'inactive',
+    mentor_status: 'approved',
+    points: 300,
+    level: 'silver',
+    subscription_type: 'plus',
+    referral_code: 'MENTOR-003',
     profile_completed: true,
-    email_verified: true,
-    two_factor_enabled: false
+    country_code: 'FR'
   })
 
-  // Créer des étudiants
-  const student1 = localUserAPI.createUser({
-    email: 'student1@traillearn.com',
-    first_name: 'Marie',
-    last_name: 'Dubois',
-    role: 'student',
-    country_code: 'FRA',
+  // Créer student
+  const student = localUserAPI.createUser({
+    email: 'student@traillearn.com',
+    password: 'student123',
+    name: 'Pierre Durand',
+    role: 'visitor',
+    is_student: true,
+    is_mentor: false,
+    student_status: 'active',
+    mentor_status: 'inactive',
+    points: 200,
+    level: 'bronze',
+    subscription_type: 'free',
+    referral_code: 'STUDENT-004',
     profile_completed: true,
-    email_verified: true,
-    two_factor_enabled: false
+    country_code: 'FR'
   })
 
-  const student2 = localUserAPI.createUser({
-    email: 'student2@traillearn.com',
-    first_name: 'John',
-    last_name: 'Smith',
-    role: 'student',
-    country_code: 'USA',
-    profile_completed: true,
-    email_verified: true,
-    two_factor_enabled: false
-  })
-
-  // Mettre à jour les profils des mentors
-  const mentor1Profile = localProfileAPI.getByUserId(mentor1.id)
-  if (mentor1Profile) {
-    localProfileAPI.updateProfile(mentor1.id, {
-      bio: 'Senior Software Engineer avec 8 ans d\'expérience en développement web',
-      current_education_level: 'professional',
-      field_of_study: 'Computer Science',
-      career_goals: ['Mentor de jeunes développeurs'],
-      interests: ['Web Development', 'JavaScript', 'React'],
-      languages: [
-        { code: 'en', level: 'native' },
-        { code: 'fr', level: 'fluent' }
-      ],
-      skills: [
-        { name: 'JavaScript', level: 'expert' },
-        { name: 'React', level: 'expert' },
-        { name: 'Node.js', level: 'advanced' }
-      ]
-    })
-  }
-
-  const mentor2Profile = localProfileAPI.getByUserId(mentor2.id)
-  if (mentor2Profile) {
-    localProfileAPI.updateProfile(mentor2.id, {
-      bio: 'Consultant en orientation académique et professionnelle',
-      current_education_level: 'professional',
-      field_of_study: 'Education',
-      career_goals: ['Aider les étudiants dans leur orientation'],
-      interests: ['Education', 'Career Development', 'International Studies'],
-      languages: [
-        { code: 'fr', level: 'native' },
-        { code: 'en', level: 'fluent' },
-        { code: 'ar', level: 'native' }
-      ],
-      skills: [
-        { name: 'Career Counseling', level: 'expert' },
-        { name: 'Academic Planning', level: 'expert' },
-        { name: 'International Education', level: 'advanced' }
-      ]
-    })
-  }
-
-  // Mettre à jour les mentors
-  const mentor1Data = localMentorAPI.getByUserId(mentor1.id)
-  if (mentor1Data) {
-    localMentorAPI.updateMentor(mentor1.id, {
-      expertise_areas: ['Web Development', 'JavaScript', 'React', 'Career Development'],
-      experience_years: 8,
-      hourly_rate: 50,
-      rating: 4.8,
-      studentsCount: 45,
-      is_verified: true,
-      isAvailable: true
-    })
-  }
-
-  const mentor2Data = localMentorAPI.getByUserId(mentor2.id)
-  if (mentor2Data) {
-    localMentorAPI.updateMentor(mentor2.id, {
-      expertise_areas: ['Academic Orientation', 'Career Development', 'International Studies'],
-      experience_years: 12,
-      hourly_rate: 40,
-      rating: 4.9,
-      studentsCount: 78,
-      is_verified: true,
-      isAvailable: true
-    })
-  }
-
-  // Créer des sessions de démonstration
-  localSessionAPI.createSession({
-    mentor_id: mentor1Data?.id || '',
-    mentee_id: student1.id,
-    title: 'Orientation carrière en Data Science',
-    description: 'Discussion sur les opportunités en Data Science',
-    scheduled_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // Demain
-    duration_minutes: 60,
-    status: 'scheduled'
-  })
-
-  localSessionAPI.createSession({
-    mentor_id: mentor2Data?.id || '',
-    mentee_id: student2.id,
-    title: 'Préparation études à l\'étranger',
-    description: 'Conseils pour étudier en France',
-    scheduled_at: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), // Après-demain
-    duration_minutes: 45,
-    status: 'scheduled'
+  // Créer visitor
+  const visitor = localUserAPI.createUser({
+    email: 'visitor@traillearn.com',
+    password: 'visitor123',
+    name: 'Sophie Leroy',
+    role: 'visitor',
+    is_student: false,
+    is_mentor: false,
+    student_status: 'inactive',
+    mentor_status: 'inactive',
+    points: 100,
+    level: 'bronze',
+    subscription_type: 'free',
+    referral_code: 'VISITOR-005',
+    profile_completed: false,
+    country_code: 'FR'
   })
 
   console.log('✅ Données de démonstration créées!')
   console.log('👤 Comptes de test:')
-  console.log('   Admin: admin@traillearn.com')
-  console.log('   Mentor 1: mentor1@traillearn.com')
-  console.log('   Mentor 2: mentor2@traillearn.com')
-  console.log('   Étudiant 1: student1@traillearn.com')
-  console.log('   Étudiant 2: student2@traillearn.com')
-  console.log('   Mot de passe pour tous: password123')
+  console.log('   Admin: admin@traillearn.com (AdminTraillearn2024!)')
+  console.log('   Visitor1: visitor1@traillearn.com (visitor123)')
+  console.log('   Mentor: mentor@traillearn.com (mentor123)')
+  console.log('   Student: student@traillearn.com (student123)')
+  console.log('   Visitor: visitor@traillearn.com (visitor123)')
 }
 
 

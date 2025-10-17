@@ -36,14 +36,15 @@ export default function MentorsPage() {
   const [selectedPriceRange, setSelectedPriceRange] = useState('')
   const [selectedRating, setSelectedRating] = useState('')
 
-  const subjects = [
-    'Mathématiques', 'Physique', 'Chimie', 'Biologie', 'Informatique',
-    'Économie', 'Histoire', 'Géographie', 'Français', 'Anglais',
-    'Philosophie', 'Sciences Politiques', 'Droit', 'Médecine', 'Ingénierie'
+  const domains = [
+    'Cybersécurité', 'Data Science', 'Machine Learning', 'Intelligence Artificielle',
+    'Développement Web', 'Développement Mobile', 'Cloud Computing', 'DevOps',
+    'Blockchain', 'IoT (Internet des Objets)', 'Reality Virtuelle/Augmentée',
+    'Bio-informatique', 'Fintech', 'E-commerce', 'Marketing Digital'
   ]
 
   const priceRanges = [
-    { label: 'Tous les prix', value: '' },
+    { label: 'Tous les prix', value: 'all' },
     { label: 'Moins de 20€/h', value: '0-20' },
     { label: '20€ - 40€/h', value: '20-40' },
     { label: '40€ - 60€/h', value: '40-60' },
@@ -83,7 +84,7 @@ export default function MentorsPage() {
       )
     }
 
-    // Filtre par matière
+    // Filtre par domaine
     if (selectedSubject && selectedSubject !== 'all') {
       filtered = filtered.filter(mentor => 
         (mentor.specialties || []).includes(selectedSubject)
@@ -178,7 +179,7 @@ export default function MentorsPage() {
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     id="search"
-                    placeholder="Matière, spécialité..."
+                    placeholder="Domaine, spécialité..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10"
@@ -186,17 +187,17 @@ export default function MentorsPage() {
                 </div>
               </div>
 
-              {/* Matière */}
+              {/* Domaine */}
               <div>
-                <Label>Matière</Label>
+                <Label>Domaine</Label>
                 <Select value={selectedSubject} onValueChange={setSelectedSubject}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Toutes les matières" />
+                    <SelectValue placeholder="Tous les domaines" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Toutes les matières</SelectItem>
-                    {subjects.map(subject => (
-                      <SelectItem key={subject} value={subject}>{subject}</SelectItem>
+                    <SelectItem value="all">Tous les domaines</SelectItem>
+                    {domains.map(domain => (
+                      <SelectItem key={domain} value={domain}>{domain}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -211,7 +212,7 @@ export default function MentorsPage() {
                   </SelectTrigger>
                   <SelectContent>
                     {priceRanges.map(range => (
-                      <SelectItem key={range.value} value={range.value || "all"}>
+                      <SelectItem key={range.value} value={range.value}>
                         {range.label}
                       </SelectItem>
                     ))}

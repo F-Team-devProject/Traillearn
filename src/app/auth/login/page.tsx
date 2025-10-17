@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { GraduationCap, ArrowLeft } from 'lucide-react'
+import { GraduationCap, ArrowLeft, Eye, EyeOff } from 'lucide-react'
 
 const loginSchema = z.object({
   email: z.string().email('Email invalide'),
@@ -23,6 +23,7 @@ export default function LoginPage() {
   const router = useRouter()
   const { signIn, isLoading } = useAuthStore()
   const [error, setError] = useState<string>('')
+  const [showPassword, setShowPassword] = useState<boolean>(false)
 
   const {
     register,
@@ -93,12 +94,26 @@ export default function LoginPage() {
 
             <div className="space-y-2">
               <Label htmlFor="password">Mot de passe</Label>
-              <Input
-                id="password"
-                type="password"
-                {...register('password')}
-                placeholder="Votre mot de passe"
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  {...register('password')}
+                  placeholder="Votre mot de passe"
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
               {errors.password && (
                 <p className="text-sm text-destructive">{errors.password.message}</p>
               )}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useAuthStore } from '@/store/authStore'
-import { localUserAPI, localSessionAPI, localMentorAPI } from '@/lib/localStorage'
+import { localUserAPI, localSessionAPI, localMentorAPI, initDemoData } from '@/lib/localStorage'
 import { config } from '@/lib/config'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -16,6 +16,9 @@ export default function TestPage() {
   })
 
   useEffect(() => {
+    // Initialiser les données de test si nécessaire
+    initDemoData()
+    
     // Charger les statistiques
     const users = localUserAPI.getAllUsers()
     const sessions = localSessionAPI.getSessionsByUser('', 'mentor')
@@ -32,6 +35,27 @@ export default function TestPage() {
     await signOut()
   }
 
+  const handleInitDemoData = () => {
+    // Vider le localStorage d'abord
+    localStorage.clear()
+    
+    // Réinitialiser les données
+    initDemoData()
+    
+    // Recharger les statistiques
+    const users = localUserAPI.getAllUsers()
+    const sessions = localSessionAPI.getSessionsByUser('', 'mentor')
+    const mentors = localMentorAPI.getAllMentors()
+    
+    setStats({
+      totalUsers: users.length,
+      totalSessions: sessions.length,
+      totalMentors: mentors.length
+    })
+    
+    alert('✅ Données de test initialisées avec succès! Vous pouvez maintenant vous connecter avec les comptes de test.')
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-4xl mx-auto">
@@ -40,6 +64,13 @@ export default function TestPage() {
           <div className="flex space-x-2">
             <Button variant="outline" onClick={() => window.location.href = '/'}>
               Retour à l'accueil
+            </Button>
+            <Button 
+              variant="default" 
+              onClick={handleInitDemoData}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              🚀 Initialiser les données de test
             </Button>
             {isAuthenticated && (
               <Button variant="outline" onClick={handleSignOut}>
